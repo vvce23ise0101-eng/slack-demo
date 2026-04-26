@@ -1,17 +1,21 @@
-name: CI/CD pipeline with slack
+name: Java CI/CD Pipeline
+
 on:
   push:
-    branches : ["main","master"]
-jobs:
-    build:
-        runs-on : windows-latest
-    steps:
-        - uses : actions/checkout@v4
-        - uses : actions/setup-java@v4
-          with:
-            distribution :'tumerin'
-            java-version :"11"
+    branches: [ "main" ]
 
-        - name: build using maven
-          run : mvn clean install
-         
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+
+      - name: Build using Maven
+        run: mvn clean install
+        
