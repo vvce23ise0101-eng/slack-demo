@@ -7,24 +7,14 @@ pipeline {
                 echo 'Building project...'
             }
         }
-    }
 
-    post {
-        success {
-            script {
-                slackSend(
-                    channel: '#slack-pakka',
-                    message: "✅ BUILD SUCCESS for ${env.JOB_NAME} #${env.BUILD_NUMBER}"
-                )
-            }
-        }
-
-        failure {
-            script {
-                slackSend(
-                    channel: '#slack-pakka',
-                    message: "❌ BUILD FAILED for ${env.JOB_NAME}"
-                )
+        stage('Notify Slack') {
+            steps {
+                bat '''
+                curl -X POST -H "Content-type: application/json" ^
+                --data "{\"text\":\"✅ Jenkins Build SUCCESS: slack-pakka #${BUILD_NUMBER}\"}" ^
+                https://hooks.slack.com/services/YOUR/WEBHOOK/URL
+                '''
             }
         }
     }
