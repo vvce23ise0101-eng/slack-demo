@@ -1,30 +1,31 @@
-pipeline{
+pipeline {
     agent any
-    tools{ 
-        maven 'Maven3'
 
-     }
-    stages{
-        stage("CHECKOUT"){
-            steps{
-                git 'https://github.com/vvce23ise0101-eng/slack-demo'
-            }
-        }  
-        stage("BUILD"){
-            steps{
-                dir('demo'){
-                    bat 'mvn clean install'
-
-                }
-            }
-
-        }
-        stage("TEST"){
-            steps{
-                dir('demo'){
-                  bat 'nvm test'
-                }
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Building project...'
             }
         }
-          }
+    }
+
+    post {
+        success {
+            script {
+                slackSend(
+                    channel: '#slack-pakka',
+                    message: "✅ BUILD SUCCESS for ${env.JOB_NAME} #${env.BUILD_NUMBER}"
+                )
+            }
+        }
+
+        failure {
+            script {
+                slackSend(
+                    channel: '#slack-pakka',
+                    message: "❌ BUILD FAILED for ${env.JOB_NAME}"
+                )
+            }
+        }
+    }
 }
