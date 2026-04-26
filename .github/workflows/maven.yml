@@ -11,7 +11,7 @@ jobs:
           with:
             distribution :'tumerin'
             java-version :"11"
-            
+
         - name: build using maven
           run : mvn clean install
-         working-directory: demo
+         
